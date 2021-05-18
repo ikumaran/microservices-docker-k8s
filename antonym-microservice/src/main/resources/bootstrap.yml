@@ -1,0 +1,14 @@
+spring:
+  cloud:
+    config:
+      uri: http://localhost:7001
+      name: antonym-service,config-client,dictionary-api
+  application:
+    name: antonym-microservice
+  profiles:
+    active: antonym-service
+
+jasypt:
+  encryptor:
+    algorithm: PBEWithMD5AndDES
+    iv-generator-classname: org.jasypt.iv.NoIvGenerator

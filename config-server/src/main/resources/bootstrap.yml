@@ -1,0 +1,21 @@
+server:
+  port: 7001
+
+spring:
+  cloud:
+    config:
+      server:
+        git:
+          uri: https://github.com/ikumaran/config-data-private
+          username: ikumaran
+          password: ENC(a5c9i9p4ZYYUQwURyD9pUuNkibk5sInhC7wdISZyIra9Ns9kVItV9Bx9+46XlqMzZBGl4XL0bVQ=)
+          skipSslValidation: true
+          clone-on-start: true
+          searchPaths: dictionary-api-config
+          default-label: main
+  application:
+    name: configserver
+jasypt:
+  encryptor:
+    algorithm: PBEWithMD5AndDES
+    iv-generator-classname: org.jasypt.iv.NoIvGenerator
