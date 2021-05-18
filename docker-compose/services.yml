@@ -1,0 +1,47 @@
+version: '3.7'
+services:
+  config-server:
+    image: ${CONFIG_SERVER_IMAGE_REPO_RELEASE}
+    hostname: config-server
+    ports:
+      - "7001:7001"
+    volumes:
+      - "./docker-logs:/workspace/config-server/logs"
+    environment:
+      - "SECRET_PASSWORD=${PASSWORD}"
+      - "SPRING_CLOUD_CONFIG_URI=http://config-server:7001"
+    networks:
+      - ${GLOBAL_NETWORK:-services}
+  synonym-service:
+    image: ${SYNONYM_SERVICE_IMAGE_REPO_RELEASE}
+    hostname: synonym-service
+    ports:
+      - "8002:8002"
+    volumes:
+      - "./docker-logs:/workspace/synonym-service/logs"
+      - "./check-config-server-started.sh:/usr/local/bin/check-config-server-started.sh"
+    entrypoint: [ "check-config-server-started.sh" ]
+    user: root
+    depends_on:
+      - config-server
+    environment:
+      - "SECRET_PASSWORD=${PASSWORD}"
+      - "SPRING_CLOUD_CONFIG_URI=http://config-server:7001"
+    networks:
+      - ${GLOBAL_NETWORK:-services}
+  antonym-service:
+    image: ${ANTONYM_SERVICE_IMAGE_REPO_RELEASE}
+    hostname: antonym-service
+    ports:
+      - "8001:8001"
+    volumes:
+      - "./docker-logs:/workspace/synonym-service/logs"
+      - "./check-config-server-started.sh:/usr/local/bin/check-config-server-started.sh"
+    entrypoint: [ "check-config-server-started.sh" ]
+    user: root
+    depends_on:
+      - config-server
+    environment:
+      - "SECRET_PASSWORD=${PASSWORD}"
+    networks:
+      - ${GLOBAL_NETWORK:-services}
