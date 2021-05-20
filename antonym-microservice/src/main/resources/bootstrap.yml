@@ -2,9 +2,7 @@ spring:
   cloud:
     config:
       uri: http://localhost:7001
-      name: antonym-service,config-client,dictionary-api
-  application:
-    name: antonym-microservice
+      name: discovery-client,dictionary-api
   profiles:
     active: antonym-service
 

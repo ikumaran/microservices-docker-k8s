@@ -2,9 +2,7 @@ spring:
   cloud:
     config:
       uri: http://localhost:7001
-      name: synonym-service,config-client,dictionary-api
-  application:
-    name: synonym-microservice
+      name: discovery-client,dictionary-api
   profiles:
     active: synonym-service
 

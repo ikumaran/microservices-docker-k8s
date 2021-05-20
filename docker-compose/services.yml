@@ -12,36 +12,70 @@ services:
       - "SPRING_CLOUD_CONFIG_URI=http://config-server:7001"
     networks:
       - ${GLOBAL_NETWORK:-services}
+  service-registry:
+    image: ${SERVICE_REGISTRY_IMAGE_REPO_RELEASE}
+    hostname: service-registry
+    ports:
+      - "6001:6001"
+    volumes:
+      - "./docker-logs:/workspace/service-registry/logs"
+    networks:
+      - ${GLOBAL_NETWORK:-services}
   synonym-service:
     image: ${SYNONYM_SERVICE_IMAGE_REPO_RELEASE}
     hostname: synonym-service
     ports:
-      - "8002:8002"
+      - "9001-9002:8002"
     volumes:
       - "./docker-logs:/workspace/synonym-service/logs"
-      - "./check-config-server-started.sh:/usr/local/bin/check-config-server-started.sh"
-    entrypoint: [ "check-config-server-started.sh" ]
+      - "./check-dependent-server-started.sh:/usr/local/bin/check-dependent-server-started.sh"
+    entrypoint: [ "check-dependent-server-started.sh" ]
     user: root
     depends_on:
       - config-server
     environment:
       - "SECRET_PASSWORD=${PASSWORD}"
       - "SPRING_CLOUD_CONFIG_URI=http://config-server:7001"
+      - "EUREKA_SERVICE_URL_DEFAULT_ZONE=http://service-registry:6001/eureka"
+      - "EUREKA_INSTANCE_HOSTNAME=synonym-service"
     networks:
       - ${GLOBAL_NETWORK:-services}
   antonym-service:
     image: ${ANTONYM_SERVICE_IMAGE_REPO_RELEASE}
     hostname: antonym-service
     ports:
-      - "8001:8001"
+      - "9003-9004:8001"
     volumes:
       - "./docker-logs:/workspace/synonym-service/logs"
-      - "./check-config-server-started.sh:/usr/local/bin/check-config-server-started.sh"
-    entrypoint: [ "check-config-server-started.sh" ]
+      - "./check-dependent-server-started.sh:/usr/local/bin/check-dependent-server-started.sh"
+    entrypoint: [ "check-dependent-server-started.sh" ]
     user: root
     depends_on:
       - config-server
     environment:
       - "SECRET_PASSWORD=${PASSWORD}"
+      - "SPRING_CLOUD_CONFIG_URI=http://config-server:7001"
+      - "EUREKA_SERVICE_URL_DEFAULT_ZONE=http://service-registry:6001/eureka"
+      - "EUREKA_INSTANCE_HOSTNAME=antonym-service"
+    networks:
+      - ${GLOBAL_NETWORK:-services}
+
+  words-service:
+    image: ${WORDS_SERVICE_IMAGE_REPO_RELEASE}
+    hostname: words-service
+    ports:
+      - "9000:8000"
+    volumes:
+      - "./docker-logs:/workspace/synonym-service/logs"
+      - "./check-dependent-server-started.sh:/usr/local/bin/check-dependent-server-started.sh"
+    entrypoint: [ "check-dependent-server-started.sh" ]
+    user: root
+    depends_on:
+      - config-server
+    environment:
+      - "SECRET_PASSWORD=${PASSWORD}"
+      - "SPRING_CLOUD_CONFIG_URI=http://config-server:7001"
+      - "EUREKA_SERVICE_URL_DEFAULT_ZONE=http://service-registry:6001/eureka"
+      - "EUREKA_INSTANCE_HOSTNAME=words-service"
     networks:
       - ${GLOBAL_NETWORK:-services}

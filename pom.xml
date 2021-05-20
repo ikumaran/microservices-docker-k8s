@@ -6,15 +6,18 @@
     <artifactId>parent-microservice</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>parent-microservice</name>
-    <description>parent project - only to ensure - all microservices goal can be triggered from this project</description>
+    <description>parent project - only to ensure - all microservices goal can be triggered from this project
+    </description>
     <properties>
         <java.version>11</java.version>
     </properties>
     <packaging>pom</packaging>
     <modules>
-        <module>commons-dictionary-api</module>
         <module>config-server</module>
+        <module>service-registry</module>
+        <module>commons-dictionary-api</module>
         <module>synonym-microservice</module>
         <module>antonym-microservice</module>
+        <module>words-microservice</module>
     </modules>
 </project>
