@@ -4,7 +4,7 @@ spring:
       uri: http://localhost:7001
       name: discovery-client,dictionary-api
   profiles:
-    active: antonym-service
+    active: dev
 
 jasypt:
   encryptor:

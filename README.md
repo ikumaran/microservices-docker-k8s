@@ -7,4 +7,11 @@ Software dependency:
 ## Maven 3.x
 ## git
 ## docker
-## k8s
+## docker-compose
+## k8s (pending)
+
+Framework and technologies:
+## Spring
+## Spring Cloud
+## Spring webflux
+## Dictionary.com APIs

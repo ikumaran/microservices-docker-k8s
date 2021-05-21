@@ -2,6 +2,6 @@ spring:
   cloud:
     config:
       uri: http://localhost:7001
-      name: discovery-client
+      name: discovery-client,gateway-config
   profiles:
     active: dev

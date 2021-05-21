@@ -19,5 +19,6 @@
         <module>synonym-microservice</module>
         <module>antonym-microservice</module>
         <module>words-microservice</module>
+        <module>api-gateway</module>
     </modules>
 </project>

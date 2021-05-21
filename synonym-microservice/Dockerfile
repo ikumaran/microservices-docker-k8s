@@ -3,5 +3,5 @@ USER root
 WORKDIR /app
 COPY target/*.jar app.jar
 
-# secret comes from docker run
+# secret_password comes from container environment variable
 ENTRYPOINT ["java", "-jar", "-Djasypt.encryptor.password=${SECRET_PASSWORD}", "/app/app.jar"]

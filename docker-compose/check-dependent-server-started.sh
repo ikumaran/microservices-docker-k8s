@@ -1,5 +1,4 @@
 #!/bin/bash
-# check-dependent-server-started.sh
 
 apt-get update -y
 
@@ -29,4 +28,5 @@ while [[ ! $curlResult == "200" ]]; do
 done
 echo "Service registry started..."
 
+# Once both services good - start the container's entry point
 /usr/local/openjdk-11/bin/java -jar -Djasypt.encryptor.password=$SECRET_PASSWORD /app/app.jar
