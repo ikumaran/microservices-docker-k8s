@@ -1,0 +1,51 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: config-server
+  labels:
+    app: config-server
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: config-server
+  template:
+    metadata:
+      labels:
+        app: config-server
+    spec:
+      containers:
+      - name: config-server
+        image: ikumaran/config-server:0.0.1-SNAPSHOT
+        env:
+          - name: SECRET_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: secret-password
+                key: PASSWORD
+          - name: SPRING_CLOUD_CONFIG_URI
+            value: http://config-server:7001
+          - name: EUREKA_SERVICE_URL_DEFAULT_ZONE
+            value: http://service-registry:6001/eureka
+        imagePullPolicy: Always
+        resources:
+          limits:
+            memory: "128Mi"
+            cpu: "500m"
+        ports:
+        - containerPort: 7001
+
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: config-server
+spec:
+  selector:
+    app: config-server
+  type: ClusterIP
+  ports:
+  - port: 80
+    targetPort: 7001

@@ -1,0 +1,51 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: words-microservice
+  labels:
+    app: words-microservice
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: words-microservice
+  template:
+    metadata:
+      labels:
+        app: words-microservice
+    spec:
+      containers:
+      - name: words-microservice
+        image: ikumaran/words-microservice:0.0.1-SNAPSHOT
+        env:
+          - name: SECRET_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: secret-password
+                key: PASSWORD
+          - name: SPRING_CLOUD_CONFIG_URI
+            value: http://config-server:7001
+          - name: EUREKA_SERVICE_URL_DEFAULT_ZONE
+            value: http://service-registry:6001/eureka
+        imagePullPolicy: Always
+        resources:
+          limits:
+            memory: "128Mi"
+            cpu: "500m"
+        ports:
+        - containerPort: 8000
+
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: words-microservice
+spec:
+  selector:
+    app: words-microservice
+  type: ClusterIP
+  ports:
+  - port: 80
+    targetPort: 8000

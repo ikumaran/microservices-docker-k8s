@@ -2,6 +2,12 @@ server:
   port: 6001
 
 eureka:
+  instance:
+    hostname: ${HOSTNAME:localhost}
   client:
-  register-with-eureka: false
-  fetch-registry: false
+    register-with-eureka: false
+    fetch-registry: false
+    service-url:
+      defaultZone: ${EUREKA_SERVICE_URL_DEFAULT_ZONE:http://localhost:6001/eureka}
+
+
